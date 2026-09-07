@@ -13,7 +13,13 @@ services.AddTransient<CatFactService>();
 await using var serviceProvider = services.BuildServiceProvider();
 try
 {
-    var numberOfFacts = args.Length > 0 && int.TryParse(args[0], out var count) ? count : 5;
+    const int defaultNumberOfFacts = 5;
+    var numberOfFacts = defaultNumberOfFacts;
+    if (args.Length > 0 && (!int.TryParse(args[0], out numberOfFacts) || numberOfFacts <= 0))
+    {
+        throw new InvalidOperationException("Number of facts must be a positive integer");
+        return 1;
+    }
     var catFactService = serviceProvider.GetRequiredService<CatFactService>();
     var fileName = Path.Combine("Data", "catfacts.txt");
     Console.WriteLine(
