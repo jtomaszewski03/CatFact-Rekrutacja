@@ -1,0 +1,32 @@
+﻿name: .NET Desktop
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore CatFactTask/CatFactTask.sln
+
+      - name: Build
+        run: dotnet build CatFactTask/CatFactTask.sln --configuration Release --no-restore
+
+      - name: Run tests
+        run: dotnet test CatFactTask/CatFactTask.sln --configuration Release --no-build
