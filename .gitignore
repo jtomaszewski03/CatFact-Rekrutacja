@@ -36,4 +36,4 @@ packages/
 Thumbs.db
 
 # Local txt file with facts
-CatFactTask/data/*.txt
+**/data/*.txt
